@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace graph {
-    public class Edge<T> {
+namespace graph.model {
+    public class Edge {
         public double Weight;
-        public Node<T> From;
-        public Node<T> To;
-        public Edge<T> BackEdge;
+        public Node From;
+        public Node To;
+        public Edge BackEdge;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using graph;
+using graph.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace graph.algorithm {
-    public class MinSpanningTree<T> : IncrementalEdgeEvaluator<T> {
+    public class MinSpanningTree : IncrementalEdgeEvaluator {
 
-        public override int Compare(Edge<T> x, Edge<T> y) {
+        public override int Compare(Edge x, Edge y) {
             CompareCount++;
             if (x.Weight > y.Weight)
                 return +1;

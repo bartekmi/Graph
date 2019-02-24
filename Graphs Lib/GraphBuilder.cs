@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using graph.model;
 
 namespace graph {
-    public class GraphBuilder<T> {
+    public class GraphBuilder {
 
         private Random _random = new Random();
 
@@ -16,7 +17,7 @@ namespace graph {
 
         // nodeCount: How many nodes
         // interconnectedness: 0 = tree, 1.0 = fully connected graph
-        public void Build<T>(Graph<T> graph, int nodeCount, double interconnectedness, Func<int, T> dataProvider = null) {
+        public void Build(Graph graph, int nodeCount, double interconnectedness, Func<int, object> dataProvider = null) {
             if (interconnectedness < 0.0 || interconnectedness > 1.0)
                 throw new ArgumentException("Interconnectedness must be 0.0 <= x <= 1.0");
 
@@ -30,16 +31,16 @@ namespace graph {
                 FullConnectThenSubtract(graph, interconnectedness);
         }
 
-        private void CreateNodes<T>(Graph<T> graph, int nodeCount, Func<int, T> dataProvider) {
+        private void CreateNodes(Graph graph, int nodeCount, Func<int, object> dataProvider) {
             for (int ii = 0; ii < nodeCount; ii++) {
-                graph.Nodes.Add(new Node<T>() {
-                    Data = dataProvider == null ? default(T) : dataProvider(ii),
+                graph.Nodes.Add(new Node() {
+                    Data = dataProvider == null ? null : dataProvider(ii),
                     Index = ii
                 });
             }
         }
 
-        private void AddEdges<T>(Graph<T> graph, double interconnectedness) {
+        private void AddEdges(Graph graph, double interconnectedness) {
             // Randomly add nodes to make a tree
             for (int ii = 0; ii < graph.NodeCount; ii++) {
                 if (ii > 0) {
@@ -69,7 +70,7 @@ namespace graph {
         }
 
         // Note that this algorithm could leave disjoint graphs, especially if number of nodes is low
-        private void FullConnectThenSubtract<T>(Graph<T> graph, double interconnectedness) {
+        private void FullConnectThenSubtract(Graph graph, double interconnectedness) {
             HashSet<long> edges = new HashSet<long>();
 
             for (int ii = 0; ii < graph.NodeCount - 1; ii++)

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace graph {
-    public class Node<T> {
-        public T Data;
+namespace graph.model {
+    public class Node {
+        public object Data;
         public int Index;
         public double Distance;     // Used for thinkgs like Dijkstra's Shortest Path
-        public List<Edge<T>> Outgoing = new List<Edge<T>>();
+        public List<Edge> Outgoing = new List<Edge>();
     }
 }

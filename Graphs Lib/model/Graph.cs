@@ -4,32 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace graph {
-    public class Graph<T> {
-        public List<Node<T>> Nodes = new List<Node<T>>();
+namespace graph.model {
+    public class Graph {
+        public List<Node> Nodes = new List<Node>();
         public bool IsDirected = false;
         public bool AllowLoops = false;
 
         // Derived
         public int NodeCount { get { return Nodes.Count; } }
-        public IEnumerable<Edge<T>> Edges { get { return Nodes.SelectMany(x => x.Outgoing); } }
+        public IEnumerable<Edge> Edges { get { return Nodes.SelectMany(x => x.Outgoing); } }
 
         internal void Connect(int from, int to, double weight = 1.0) {
 
             if (!AllowLoops && from == to)
                 throw new Exception("Loops not allowed");
 
-            Edge<T> forward = ConnectPrivate(from, to, weight);
+            Edge forward = ConnectPrivate(from, to, weight);
 
             if (!IsDirected) {
-                Edge<T> back = ConnectPrivate(to, from, weight);
+                Edge back = ConnectPrivate(to, from, weight);
                 forward.BackEdge = back;
                 back.BackEdge = forward;
             }
         }
 
-        private Edge<T> ConnectPrivate(int from, int to, double weight) {
-            Edge<T> edge = new Edge<T>() {
+        private Edge ConnectPrivate(int from, int to, double weight) {
+            Edge edge = new Edge() {
                 From = Nodes[from],
                 To = Nodes[to],
                 Weight = weight,
