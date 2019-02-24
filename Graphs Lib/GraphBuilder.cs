@@ -8,11 +8,15 @@ using graph.model;
 namespace graph {
     public class GraphBuilder {
 
-        private Random _random = new Random();
+        private Random _random;
 
         enum BuildStrategy {
             AddEdges,
             SubtractEdges,
+        }
+
+        public GraphBuilder(Random random) {
+            _random = random;
         }
 
         // nodeCount: How many nodes

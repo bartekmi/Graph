@@ -10,43 +10,35 @@ namespace graph.algorithm {
     public abstract class IncrementalEdgeEvaluator : IComparer<Edge> {
 
         public static int CompareCount = 0;
-        protected virtual void PostProcessTreeNode(Node parent, Node child, Edge edge) { }
+        protected virtual void CleanWorkingData(Graph graph) {
+            foreach (Node node in graph.Nodes)
+                node.EdgeToParent = null;
+        }
+        protected virtual void PostProcessEdge(Edge edge) { }
 
-        public Graph Calculate(Graph graph, Node start) {
-            Graph mst = new Graph();
+        // Node.Parent values will be set
+        public void Calculate(Graph graph, Node start) {
+            CleanWorkingData(graph);
 
             var nonTree = new HashSet<Node>(graph.Nodes);
             var tree = new HashSet<Node>();
-            var oldToNew = new Dictionary<Node, Node>();
             var sortedOutgoingEdges = new SortedDictionary<Edge, Edge>((IComparer<Edge>)this);
 
-            MoveNode(start, nonTree, tree, mst, oldToNew, sortedOutgoingEdges);
+            MoveNode(start, nonTree, tree, sortedOutgoingEdges);
 
             while (nonTree.Count > 0) {
                 Edge shortest = sortedOutgoingEdges.First().Value;
+                PostProcessEdge(shortest);
 
-                Node newNode = MoveNode(shortest.To, nonTree, tree, mst, oldToNew, sortedOutgoingEdges);
-                Node parentNode = oldToNew[shortest.From];
-                parentNode.Outgoing.Add(new Edge() {
-                    Weight = shortest.Weight,
-                    From = parentNode,
-                    To = newNode
-                });
-
-                PostProcessTreeNode(parentNode, newNode, shortest);
+                MoveNode(shortest.To, nonTree, tree, sortedOutgoingEdges);
+                shortest.To.EdgeToParent = shortest.BackEdge;
             }
-
-            return mst;
         }
 
-        private Node MoveNode(Node node, HashSet<Node> nonTree, HashSet<Node> tree, Graph mst,
-            Dictionary<Node, Node> oldToNew, SortedDictionary<Edge, Edge> sortedOutgoingEdges) {
+        private void MoveNode(Node node, HashSet<Node> nonTree, HashSet<Node> tree, SortedDictionary<Edge, Edge> sortedOutgoingEdges) {
 
             nonTree.Remove(node);
             tree.Add(node);
-            Node newNode = new Node() { Data = node.Data };
-            mst.Nodes.Add(newNode);
-            oldToNew[node] = newNode;
 
             foreach (Edge edge in node.Outgoing) {
                 if (tree.Contains(edge.To))
@@ -54,8 +46,6 @@ namespace graph.algorithm {
                 else
                     sortedOutgoingEdges.Add(edge, edge);
             }
-
-            return newNode;
         }
 
         public abstract int Compare(Edge x, Edge y);

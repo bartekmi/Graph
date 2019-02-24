@@ -13,6 +13,11 @@ namespace graph.model {
         // Derived
         public int NodeCount { get { return Nodes.Count; } }
         public IEnumerable<Edge> Edges { get { return Nodes.SelectMany(x => x.Outgoing); } }
+        public IEnumerable<Edge> TreeEdges {
+            get {
+                return Nodes.Select(x => x.EdgeToParent).Where(x => x != null);
+            }
+        }
 
         internal void Connect(int from, int to, double weight = 1.0) {
 

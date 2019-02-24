@@ -10,5 +10,9 @@ namespace graph.model {
         public Node From;
         public Node To;
         public Edge BackEdge;
+
+        public override string ToString() {
+            return string.Format("EDGE From {0} to {1}. Weight = {2}", From.Index, To.Index, Weight);
+        }
     }
 }

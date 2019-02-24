@@ -33,12 +33,19 @@
             <TextBlock>Node Count:</TextBlock>
             <TextBox Name="uxTbNodeCount" Text="10"/>
             <TextBlock Width="50"/>
+
             <TextBlock>Interconnectedness (0-1):</TextBlock>
             <TextBox Name="uxTbInterconnectedness" Text="1.0"/>
             <TextBlock Width="50"/>
+
             <RadioButton Name="uxRbMin" IsChecked="true">Min</RadioButton>
             <RadioButton Name="uxRbMax">Max</RadioButton>
             <TextBlock Width="50"/>
+
+            <TextBlock>Seed:</TextBlock>
+            <TextBox Name="uxTbSeed" Text="0"/>
+            <TextBlock Width="50"/>
+
             <Button Name="uxBtGenerate">Generate</Button>
         </StackPanel>
 

@@ -23,8 +23,14 @@ namespace graph.algorithm {
             return 0;
         }
 
-        protected override void PostProcessTreeNode(Node parent, Node child, Edge edge) {
-            child.Distance = parent.Distance + edge.Weight;
+        protected override void CleanWorkingData(Graph graph) {
+            base.CleanWorkingData(graph);
+            foreach (Node node in graph.Nodes)
+                node.Distance = 0.0;
+        }
+
+        protected override void PostProcessEdge(Edge edge) {
+            edge.To.Distance = edge.From.Distance + edge.Weight;
         }
     }
 }
