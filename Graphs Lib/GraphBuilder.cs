@@ -75,21 +75,24 @@ namespace graph {
 
         // Note that this algorithm could leave disjoint graphs, especially if number of nodes is low
         private void FullConnectThenSubtract(Graph graph, double interconnectedness) {
-            HashSet<long> edges = new HashSet<long>();
+            List<long> edges = new List<long>();
 
-            for (int ii = 0; ii < graph.NodeCount - 1; ii++)
-                for (int jj = ii + 1; jj < graph.NodeCount; jj++)
-                    edges.Add(ii * graph.NodeCount + jj);       // Encode 2 integers in one long
+            for (int from = 0; from < graph.NodeCount - 1; from++)
+                for (int to = from + 1; to < graph.NodeCount; to++)
+                    edges.Add(from * graph.NodeCount + to);       // Encode 2 integers in one long
 
-            // We assume has order is random
             int fullConnectionCount = graph.NodeCount * (graph.NodeCount - 1) / 2;
             int toCreate = (int)(fullConnectionCount * interconnectedness);
 
-            foreach (long item in edges.Take(toCreate)) { 
+            for (int ii = 0; ii < toCreate; ii++) {
+                int index = _random.Next(edges.Count);
+                long item = edges[index];
+
                 int from = (int)(item / graph.NodeCount);
                 int to = (int)(item % graph.NodeCount);
 
                 graph.Connect(from, to);
+                edges.RemoveAt(index);
             }
         }
     }
